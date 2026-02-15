@@ -2,7 +2,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { toTimestampFormat } from 'common/time';
 import { v4 as  uuidv4} from 'uuid';
-import { type ComponentProperty } from './util'
+import { type MonoProperty } from './util'
 import clsx from 'clsx';
 import axios from 'axios';
 import { sleep } from 'common/util';
@@ -26,7 +26,7 @@ function ChatArea(){
 
     return (
         <div className="chat-area w-96 bg-slate-50 ">
-            <ChatHistory prop={messages}/>
+            <ChatHistory messages={messages}/>
             <hr></hr>
             <footer className="p-4 flex items-center space-x-2">
                 <input
@@ -39,14 +39,14 @@ function ChatArea(){
     );
 }
 
-function ChatHistory({prop}: ComponentProperty<Message[]>){
+function ChatHistory({messages}: MonoProperty<'messages', Message[]>){
     const scrollBottomRef = useRef<HTMLDivElement>(null);
     useLayoutEffect(()=>{
         scrollBottomRef?.current?.scrollIntoView();
     });
     return (
         <section className='chat-history p-2 h-96 overflow-y-auto'>
-            {prop.map(msg => (<MessageItem key={msg.id} prop={msg}/>))}
+            {messages.map(msg => (<MessageItem key={msg.id} message={msg}/>))}
             <div ref={scrollBottomRef}></div>
         </section>
     )
@@ -95,16 +95,16 @@ class Message {
     set updatedAt(updatedAt: string){this._updatedAt = updatedAt}
 }
 
-function MessageItem({prop}: ComponentProperty<Message>){
-    const [msg, setMsg] = useState(prop.text);
-    const [timestamp, setTimestamp] = useState(prop.updatedAt);
+function MessageItem({message}: MonoProperty<'message', Message>){
+    const [msg, setMsg] = useState(message.text);
+    const [timestamp, setTimestamp] = useState(message.updatedAt);
     return (
         <article className={clsx("w-full", "flex", "flex-col", "my-2")}>
-            <div className={clsx("flex", "items-start", prop.isMine && "justify-end")}>
-                <span className={clsx("py-1", "px-2", "rounded-xl", prop.isMine? "bg-lime-500" : "bg-gray-200")}>{msg}</span>
+            <div className={clsx("flex", "items-start", message.isMine && "justify-end")}>
+                <span className={clsx("py-1", "px-2", "rounded-xl", message.isMine? "bg-lime-500" : "bg-gray-200")}>{msg}</span>
             </div>
-            <footer className={clsx("flex", "items-start", prop.isMine && "justify-end")}>
-                <span className={clsx("text-xs", "mt-1", prop.isMine?"text-right":"text-left")}>{timestamp}</span>
+            <footer className={clsx("flex", "items-start", message.isMine && "justify-end")}>
+                <span className={clsx("text-xs", "mt-1", message.isMine?"text-right":"text-left")}>{timestamp}</span>
             </footer>
         </article>
     )
