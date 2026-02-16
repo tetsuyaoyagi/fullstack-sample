@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import axios from 'axios';
 import { sleep } from 'common/util';
 
-function ChatArea(){
+export default function ChatArea(){
     const [msg, changeMessage] = useState("");
     const [messages, setMessages] = useState<Message[]>([]);
 
@@ -109,5 +109,3 @@ function MessageItem({message}: MonoProperty<'message', Message>){
         </article>
     )
 }
-
-export default ChatArea
