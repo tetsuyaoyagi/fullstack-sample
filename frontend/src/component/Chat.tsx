@@ -33,7 +33,7 @@ export default function ChatArea(){
                     className={clsx("flex-1", "border", "border-gray-300", "rounded-full", "px-4", "py-2", "focus:outline-none", "focus:ring-2", "focus:ring-lime-500")}
                     placeholder='message' value={msg} onChange={(e)=>changeMessage(e.target.value)}
                 />
-                <button className="bg-lime-500 text-white px-4 py-2 rounded-full hover:bg-lime-600" disabled={msg.trim() === ""} onClick={()=>sendMessage(msg)}>Send</button>
+                <button className={clsx(msg.trim() === "" && "hidden", "bg-lime-500", "text-white", "px-4", "py-2", "rounded-full", "hover:bg-lime-600")} disabled={msg.trim() === ""} onClick={()=>sendMessage(msg)}>Send</button>
             </footer>
         </div>    
     );
