@@ -4,7 +4,6 @@ import { toTimestampFormat } from 'common/time';
 import { v4 as  uuidv4} from 'uuid';
 import { type MonoProperty } from './util'
 import clsx from 'clsx';
-import axios from 'axios';
 import { sleep } from 'common/util';
 
 export default function ChatArea(){
@@ -19,8 +18,11 @@ export default function ChatArea(){
         appendMessage(Message.my(msg));
         sleep(1000);
         //バックエンドAPI接続
-        axios.post("http://localhost:8080/send/text", msg)
-        .then((res)=>appendMessage(Message.other(res.data)))
+        fetch("http://localhost:8080/send/text", {
+            method: "POST",
+            body: msg
+        })
+        .then((res)=>res.text().then((reply)=>appendMessage(Message.other(reply))))
         .catch(()=>appendMessage(Message.other("送信に失敗しました。")));
     }
 
