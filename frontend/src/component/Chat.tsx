@@ -90,11 +90,6 @@ class Message {
     public get createdAt(): string {return this._createdAt}
     public get updatedAt(): string {return this._updatedAt}
     public get isMine(): boolean {return this._isMine}
-    public set text(text: string){
-        this._text = text;
-        this._updatedAt = toTimestampFormat(new Date());
-    }
-    set updatedAt(updatedAt: string){this._updatedAt = updatedAt}
 }
 
 const MessageItem = memo(({message}: MonoProperty<'message', Message>)=>{
