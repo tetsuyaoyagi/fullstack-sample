@@ -1,5 +1,5 @@
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, memo } from 'react';
 import { toTimestampFormat } from 'common/time';
 import { v4 as  uuidv4} from 'uuid';
 import { type MonoProperty } from './util'
@@ -97,17 +97,15 @@ class Message {
     set updatedAt(updatedAt: string){this._updatedAt = updatedAt}
 }
 
-function MessageItem({message}: MonoProperty<'message', Message>){
-    const [msg, setMsg] = useState(message.text);
-    const [timestamp, setTimestamp] = useState(message.updatedAt);
+const MessageItem = memo(({message}: MonoProperty<'message', Message>)=>{
     return (
         <article className={clsx("w-full", "flex", "flex-col", "my-2")}>
             <div className={clsx("flex", "items-start", message.isMine && "justify-end")}>
-                <span className={clsx("py-1", "px-2", "rounded-xl", message.isMine? "bg-lime-500" : "bg-gray-200")}>{msg}</span>
+                <span className={clsx("py-1", "px-2", "rounded-xl", message.isMine? "bg-lime-500" : "bg-gray-200")}>{message.text}</span>
             </div>
             <footer className={clsx("flex", "items-start", message.isMine && "justify-end")}>
-                <span className={clsx("text-xs", "mt-1", message.isMine?"text-right":"text-left")}>{timestamp}</span>
+                <span className={clsx("text-xs", "mt-1", message.isMine?"text-right":"text-left")}>{message.updatedAt}</span>
             </footer>
         </article>
     )
-}
+});
